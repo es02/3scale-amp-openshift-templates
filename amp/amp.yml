@@ -675,7 +675,21 @@ objects:
                 name: backend-environment
           image: amp-backend:latest
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            tcpSocket:
+              port: 3000
           name: backend-cron
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: 3000
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
           resources:
             limits:
               cpu: 150m
@@ -1005,7 +1019,21 @@ objects:
                 name: system-events-hook
           image: amp-backend:latest
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            tcpSocket:
+              port: 3000
           name: backend-worker
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: 3000
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
           resources:
             limits:
               cpu: "1"
@@ -3091,7 +3119,21 @@ objects:
                 name: backend-internal-api
           image: amp-system:latest
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            tcpSocket:
+              port: 7433
           name: system-sidekiq
+          ports:
+          - containerPort: 7433
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 7433
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
           resources:
             limits:
               cpu: "1"
@@ -3298,6 +3340,12 @@ objects:
             tcpSocket:
               port: 9306
           name: system-sphinx
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9306
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
           resources:
             limits:
               cpu: "1"
